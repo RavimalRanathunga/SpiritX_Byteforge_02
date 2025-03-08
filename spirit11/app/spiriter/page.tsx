@@ -82,15 +82,15 @@ export default function ChatPage() {
           {/* Header */}
           <div className="mb-6 text-center">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Hii I'm Spiriter
+              HELLO I'M SPIRITER
             </h1>
             <p className="text-gray-300 mt-2 text-sm">
-              How can I Help you Today
+              How can I help you Today ?
             </p>
           </div>
 
-          {/* Chat Messages */}
-          <div className="h-[500px] overflow-y-auto mb-6 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+          {/* Chat Messages with Custom Scrollbar */}
+          <div className="h-[500px] overflow-y-auto mb-6 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-gray-900/20">
             <div className="space-y-4 pr-2">
               {chat.map((msg, idx) => (
                 <div
@@ -117,7 +117,7 @@ export default function ChatPage() {
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
                       </div>
-                      <span>Thinking...</span>
+                      <span></span>
                     </div>
                   </div>
                 </div>
@@ -133,8 +133,8 @@ export default function ChatPage() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 p-3 bg-gray-900/80 text-white rounded-xl outline-none resize-none overflow-hidden border border-white/10 focus:border-indigo-400/50 transition-all placeholder-gray-400"
-              placeholder="Type your message here..."
+              className="flex-1 p-3 bg-gray-800/70 backdrop-blur-lg text-white rounded-xl outline-none resize-none overflow-hidden border border-indigo-400/30 focus:border-indigo-400/50 transition-all placeholder-gray-400"
+              placeholder="Message Spiriter ..."
               rows={1}
               style={{ minHeight: "56px" }}
             />
