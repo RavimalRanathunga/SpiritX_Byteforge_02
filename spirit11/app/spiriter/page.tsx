@@ -82,7 +82,7 @@ export default function ChatPage() {
           {/* Header */}
           <div className="mb-6 text-center">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              HELLO I'M SPIRITER
+              Hello I'm Spiriter
             </h1>
             <p className="text-gray-300 mt-2 text-sm">
               How can I help you Today ?
