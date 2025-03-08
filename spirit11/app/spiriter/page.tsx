@@ -76,7 +76,7 @@ export default function ChatPage() {
   return (
     <div 
       className="min-h-screen p-4 flex items-center justify-center bg-cover bg-fixed bg-center"
-      style={{ backgroundImage: "url('/img2.jpg')" }}
+      style={{ backgroundImage: "url('/img3.png')" }}
     >
       <div className="w-full max-w-2xl bg-black/60 rounded-2xl backdrop-blur-xl border border-white/10 shadow-2xl">
         <div className="p-6">
