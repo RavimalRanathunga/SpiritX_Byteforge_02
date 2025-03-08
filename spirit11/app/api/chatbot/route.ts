@@ -28,11 +28,12 @@ export async function POST(req: NextRequest) {
     }
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-1.5-pro', // or -pro or -flash
       generationConfig: { maxOutputTokens: 100 },
     });
 
-    const prompt = `${greeting}Act as Spiriter, a Cricket assistant. Follow these rules:
+    const prompt = `${greeting}Act as Spiriter, a Cricket assistant, Assists users with team selection and player insights. 
+      Rules:
       1. Suggest player lineups and strategies
       2. Never mention exact points
       3. Keep responses under 100 words
