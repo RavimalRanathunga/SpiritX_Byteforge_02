@@ -50,9 +50,8 @@ export default function ChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat, isTyping]);
 
-  const typewriterEffect = async (text: string, role: "bot" | "user") => {
-    const newMessage = { role, content: "" };
-    setChat(prev => [...prev, newMessage]);
+  const typewriterEffect = async (text: string) => {
+    setChat(prev => [...prev, { role: "bot", content: "" }]);
     
     let currentText = "";
     for (const char of text) {
@@ -60,7 +59,7 @@ export default function ChatPage() {
       await new Promise((resolve) => setTimeout(resolve, 50));
       setChat(prev => {
         const lastMessage = prev[prev.length - 1];
-        if (lastMessage.role === role) {
+        if (lastMessage.role === "bot") {
           return [
             ...prev.slice(0, -1),
             { ...lastMessage, content: currentText }
@@ -74,7 +73,7 @@ export default function ChatPage() {
   const sendMessage = async () => {
     if (!message.trim() || isInitializing) return;
 
-    await typewriterEffect(message, "user");
+    setChat(prev => [...prev, { role: "user", content: message }]);
     setMessage("");
     setIsTyping(true);
 
@@ -85,9 +84,9 @@ export default function ChatPage() {
       });
       const botReply = response.data.reply;
       
-      await typewriterEffect(botReply, "bot");
+      await typewriterEffect(botReply);
     } catch (error) {
-      await typewriterEffect("⚠️ Error processing request. Please try again.", "bot");
+      await typewriterEffect("⚠️ Error processing request. Please try again.");
     } finally {
       setIsTyping(false);
     }
@@ -118,8 +117,8 @@ export default function ChatPage() {
           </div>
 
           {/* Chat Messages with Custom Scrollbar */}
-          <div className="h-[500px] overflow-y-auto mb-6 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-gray-900/20">
-            <div className="space-y-4 pr-2">
+          <div className="h-[500px] overflow-y-auto mb-6 scrollbar scrollbar-thin scrollbar-thumb-gray-700/50 scrollbar-track-transparent">
+            <div className="space-y-4 pr-4">
               {chat.map((msg, idx) => (
                 <div
                   key={idx}
@@ -136,7 +135,7 @@ export default function ChatPage() {
                   </div>
                 </div>
               ))}
-              {(isTyping || isInitializing) && (
+              {isTyping && (
                 <div className="flex justify-start">
                   <div className="max-w-[85%] bg-gray-800/90 text-gray-300 rounded-2xl p-4 shadow-lg">
                     <div className="flex items-center gap-2">
