@@ -52,6 +52,7 @@ export default function ChatPage() {
           return prev;
         });
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setChat((prev) => [
         ...prev,
@@ -82,7 +83,7 @@ export default function ChatPage() {
           {/* Header */}
           <div className="mb-6 text-center">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Hello I'm Spiriter
+              Hello I am Spiriter
             </h1>
             <p className="text-gray-300 mt-2 text-sm">
               How can I help you Today ?
