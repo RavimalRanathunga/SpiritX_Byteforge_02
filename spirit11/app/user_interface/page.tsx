@@ -1,18 +1,26 @@
-"use client";
-
+// "use client";
+import { signOut } from "@/auth";
+import { PowerIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="h-screen bg-gradient-to-br from-pink-400 to-blue-900 via-white flex flex-col items-center justify-center p-6 text-black">
       {/* Top Bar */}
-      <div className="fixed top-0 left-0 w-full bg-gray-900 text-white py-2 px-6 text-lg font-bold shadow-md text-left">
-        Spirit11
+      <div className="fixed top-0 left-0 w-full bg-white-900 text-pink py-2 px-6 text-lg font-bold shadow-md text-left flex justify-between">
+      <h1 className="text-2xl font-bold my-auto">Welcome to Spirit11</h1>
+      <form
+              action={async () => {
+                'use server';
+                await signOut({ redirectTo: '/' });
+              }}>
+            <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
+            <PowerIcon className="w-6" />
+            <div className="hidden md:block">Sign Out</div>
+          </button>
+          </form>
       </div>
-
-      <h1 className="text-4xl font-bold mb-6 mt -10">Hi,</h1>
-      <h1 className="text-4xl font-bold mb-6">Welcome to Spirit11</h1>
-
+      
       {/* Centered Description */}
       <p className="text-lg font-semibold text-center max-w-2xl leading-relaxed mb-8">
         Spirit11 is your ultimate fantasy team management platform. <br />
@@ -37,11 +45,6 @@ export default function Home() {
         💬
       </Link>
 
-      {/* Footer */}
-      <div className="fixed bottom-0 left-0 w-full bg-gray-900 text-white py-2 px-6 text-lg font-bold shadow-md flex justify-between">
-        <span>MoraSpirit</span>
-        <span className="text-sm">University of Moratuwa</span>
-      </div>
     </div>
   );
 }

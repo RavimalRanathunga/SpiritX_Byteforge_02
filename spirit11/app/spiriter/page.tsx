@@ -10,6 +10,32 @@ export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const [sessionId] = useState(() => crypto.randomUUID());
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  // Initial greeting with typewriter effect
+  useEffect(() => {
+    const initialGreeting = "Heyy Champion! 🏏 Ready to Build Your Winning Squad? 😎🔥";
+    
+    const showGreeting = async () => {
+      setIsInitializing(true);
+      setChat([{ role: "bot", content: "" }]);
+      
+      let currentText = "";
+      for (const char of initialGreeting) {
+        currentText += char;
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        setChat(prev => {
+          const newChat = [...prev];
+          newChat[0] = { role: "bot", content: currentText };
+          return newChat;
+        });
+      }
+      setIsInitializing(false);
+    };
+
+    showGreeting();
+  }, []);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -24,43 +50,44 @@ export default function ChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat, isTyping]);
 
-  const sendMessage = async () => {
-    if (!message.trim()) return;
+  const typewriterEffect = async (text: string) => {
+    setChat(prev => [...prev, { role: "bot", content: "" }]);
+    
+    let currentText = "";
+    for (const char of text) {
+      currentText += char;
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      setChat(prev => {
+        const lastMessage = prev[prev.length - 1];
+        if (lastMessage.role === "bot") {
+          return [
+            ...prev.slice(0, -1),
+            { ...lastMessage, content: currentText }
+          ];
+        }
+        return prev;
+      });
+    }
+  };
 
-    setChat((prev) => [...prev, { role: "user", content: message }]);
+  const sendMessage = async () => {
+    if (!message.trim() || isInitializing) return;
+
+    setChat(prev => [...prev, { role: "user", content: message }]);
     setMessage("");
     setIsTyping(true);
 
     try {
-      const response = await axios.post("/api/chatbot", { message });
+      const response = await axios.post("/api/chatbot", { 
+        message,
+        sessionId
+      });
       const botReply = response.data.reply;
-
-      setChat((prev) => [...prev, { role: "bot", content: "" }]);
-
-      let currentText = "";
-      for (const char of botReply) {
-        currentText += char;
-        await new Promise((resolve) => setTimeout(resolve, 50));
-        setChat((prev) => {
-          const lastMessage = prev[prev.length - 1];
-          if (lastMessage.role === "bot") {
-            return [
-              ...prev.slice(0, -1),
-              { ...lastMessage, content: currentText },
-            ];
-          }
-          return prev;
-        });
-      }
+      
+      await typewriterEffect(botReply);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      setChat((prev) => [
-        ...prev,
-        { 
-          role: "bot", 
-          content: "⚠️ Error processing request. Please try again." 
-        },
-      ]);
+      await typewriterEffect("⚠️ Error processing request. Please try again.");
     } finally {
       setIsTyping(false);
     }
@@ -85,14 +112,14 @@ export default function ChatPage() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
               Hello I am Spiriter
             </h1>
-            <p className="text-gray-300 mt-2 text-sm">
-              How can I help you Today ?
+            <p className="text-gray-300 mt-2 text-sm font-semibold italic">
+              Strategize, Select, Dominate!
             </p>
           </div>
 
           {/* Chat Messages with Custom Scrollbar */}
-          <div className="h-[500px] overflow-y-auto mb-6 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-gray-900/20">
-            <div className="space-y-4 pr-2">
+          <div className="h-[500px] overflow-y-auto mb-6 scrollbar scrollbar-thin scrollbar-thumb-gray-700/50 scrollbar-track-transparent">
+            <div className="space-y-4 pr-4">
               {chat.map((msg, idx) => (
                 <div
                   key={idx}
@@ -118,7 +145,6 @@ export default function ChatPage() {
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
                       </div>
-                      <span></span>
                     </div>
                   </div>
                 </div>
@@ -138,11 +164,12 @@ export default function ChatPage() {
               placeholder="Message Spiriter ..."
               rows={1}
               style={{ minHeight: "56px" }}
+              disabled={isInitializing}
             />
             <button
               onClick={sendMessage}
               className="h-14 w-14 p-2 bg-indigo-600/90 hover:bg-indigo-700/90 rounded-xl flex items-center justify-center transition-all shadow-lg hover:shadow-indigo-500/30 disabled:opacity-50"
-              disabled={!message.trim() || isTyping}
+              disabled={!message.trim() || isTyping || isInitializing}
             >
               <Send size={24} className="text-white" />
             </button>

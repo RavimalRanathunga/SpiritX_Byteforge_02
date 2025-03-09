@@ -62,7 +62,7 @@ export default function SignupForm() {
           {passwordMatchError && <p className="text-sm text-red-500 mt-1">{passwordMatchError}</p>}
         </div>
 
-        <input type="hidden" name="redirectTo" value={"/dashboard"} />
+        <input type="hidden" name="redirectTo" value={"/user_interface"} />
         <Button className="mt-4 w-full" aria-disabled={isPending}>
           Sign Up <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
