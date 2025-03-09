@@ -85,6 +85,7 @@ export default function ChatPage() {
       const botReply = response.data.reply;
       
       await typewriterEffect(botReply);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       await typewriterEffect("⚠️ Error processing request. Please try again.");
     } finally {
@@ -109,7 +110,7 @@ export default function ChatPage() {
           {/* Header */}
           <div className="mb-6 text-center">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Hello I'm Spiriter
+              Hello I am Spiriter
             </h1>
             <p className="text-gray-300 mt-2 text-sm font-semibold italic">
               Strategize, Select, Dominate!
